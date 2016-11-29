@@ -7,7 +7,7 @@ class RedisCollection
     namespace: '',
     load:     -> string { Marshal.load(string) },
     dump:     -> object { Marshal.dump(object) },
-    make_key: -> object { object['id'] }
+    make_key: -> object { object[:id] }
   )
 
     @redis         = redis

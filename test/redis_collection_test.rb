@@ -9,8 +9,8 @@ class RedisCollectionTest < Minitest::Test
   def setup
     @redis = MockRedis.new
     @books = [
-      {'id' => 1, 'title' => 'Programming Elixir'},
-      {'id' => 2, 'title' => 'Programming Phoenix'}
+      {id: 1, title: 'Programming Elixir'},
+      {id: 2, title: 'Programming Phoenix'}
     ]
   end
 
@@ -34,13 +34,13 @@ class RedisCollectionTest < Minitest::Test
 
     rc.sync(@books)
     assert_equal [
-      "{\"id\"=>1, \"title\"=>\"Programming Elixir\"}",
-      "{\"id\"=>2, \"title\"=>\"Programming Phoenix\"}"
+      "{:id=>1, :title=>\"Programming Elixir\"}",
+      "{:id=>2, :title=>\"Programming Phoenix\"}"
     ], read_namespace
   end
 
   def test_allows_custom_key
-    rc = RedisCollection.new(@redis, make_key: -> obj {obj['id'] + 5})
+    rc = RedisCollection.new(@redis, make_key: -> obj {obj[:id] + 5})
     rc.sync(@books)
     assert_equal @books[0], Marshal.load(@redis.get(6))
   end
@@ -50,8 +50,8 @@ class RedisCollectionTest < Minitest::Test
     rc.sync(@books)
 
     new_books = [
-      {'id' => 1, 'title' => 'Programming Elixir'},
-      {'id' => 2, 'title' => 'Programming Ruby'}
+      {id: 1, title: 'Programming Elixir'},
+      {id: 2, title: 'Programming Ruby'}
     ]
 
     rc.sync(new_books)
@@ -61,7 +61,7 @@ class RedisCollectionTest < Minitest::Test
   def test_deletes_extra_objects
     rc = RedisCollection.new(@redis)
     rc.sync(@books)
-    new_books = [{'id' => 1, 'title' => 'Programming Elixir'}]
+    new_books = [{id: 1, title: 'Programming Elixir'}]
     rc.sync(new_books)
     assert_equal new_books, read_namespace.map{|s| Marshal.load(s)}
   end
@@ -76,7 +76,7 @@ class RedisCollectionTest < Minitest::Test
     rc = RedisCollection.new(@redis)
     stats = rc.sync(@books)
     assert_equal 0, stats[:del_cnt]
-    stats = rc.sync([{'id' => 1, 'title' => 'Programming Elixir'}])
+    stats = rc.sync([{id: 1, title: 'Programming Elixir'}])
     assert_equal 1, stats[:del_cnt]
   end
 

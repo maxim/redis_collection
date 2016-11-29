@@ -29,8 +29,8 @@ Or install it yourself as:
 
 ```ruby
 books = [
-  { 'id' => 1, 'title' => 'Programming Elixir' },
-  { 'id' => 2, 'title' => 'Programming Phoenix' }
+  { id: 1, title: 'Programming Elixir' },
+  { id: 2, title: 'Programming Phoenix' }
 ]
 
 redis = Redis.new(url: ENV['REDIS_URL'])
